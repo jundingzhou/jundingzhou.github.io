@@ -197,10 +197,6 @@
                 }
             };
             if (navigator.getUserMedia != null) {
-                navigator.getUserMedia(constraint).then(onGotAudioIn)["catch"](function (err) {
-                    return onError("Could not get audio media device: " + err);
-                });
-            } else {
                 navigator.getUserMedia(constraint, onGotAudioIn, function () {
                     return onError("Could not get audio media device: " + err);
                 });
