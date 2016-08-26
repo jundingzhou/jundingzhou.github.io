@@ -196,11 +196,8 @@
                     }
                 }
             };
-            if (navigator.getUserMedia != null) {
-                navigator.getUserMedia(constraint, onGotAudioIn, function () {
-                    return onError("Could not get audio media device: " + err);
-                });
-            }
+
+            initAudio();
             //if ((navigator.mediaDevices != null) && (navigator.mediaDevices.getUserMedia != null)) {
             //  navigator.mediaDevices.getUserMedia(constraint).then(onGotAudioIn)["catch"](function(err) {
             //    return onError("Could not get audio media device: " + err);
@@ -212,6 +209,32 @@
             //}
         }
     };
+
+
+    function initAudio() {
+        if (!navigator.getUserMedia)
+            navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        if (!navigator.cancelAnimationFrame)
+            navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
+        if (!navigator.requestAnimationFrame)
+            navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
+
+        navigator.getUserMedia(
+            {
+                "audio": {
+                    "mandatory": {
+                        "googEchoCancellation": "false",
+                        "googAutoGainControl": "false",
+                        "googNoiseSuppression": "false",
+                        "googHighpassFilter": "false"
+                    },
+                    "optional": []
+                },
+            }, onGotAudioIn, function (e) {
+                alert('Error getting audio');
+                console.log(e);
+            });
+    }
 
     $audioInSelect.on('change', onChangeAudioIn);
 
